@@ -2,3 +2,4 @@ flet
 openai
 pandas
 numpy
+sympy
