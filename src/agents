@@ -1,0 +1,22 @@
+import random
+
+class LyricsAgent:
+    def __init__(self):
+        self.temas = [
+            "el tiempo", "la oscuridad", "el sistema", "la ambición",
+            "la roca eterna", "el código oculto", "el flujo eterno",
+            "la fractura concoidea", "el hexágono sagrado"
+        ]
+
+    def process(self, text):
+        tema_elegido = random.choice(self.temas)
+        return (
+            f"Modo Lírica activado 🔥\n"
+            f"Tema sugerido: '{tema_elegido}'\n\n"
+            f"Estructura recomendada (flow clásico):\n"
+            f"[Intro] Plantea el concepto base\n"
+            f"[Verso 1] Multisilábicas y desarrollo\n"
+            f"[Estribillo] Hook repetible y pegajoso\n"
+            f"[Verso 2] Metáforas profundas + punchlines\n"
+            f"[Outro] Remate filosófico o llamada al código"
+        )
