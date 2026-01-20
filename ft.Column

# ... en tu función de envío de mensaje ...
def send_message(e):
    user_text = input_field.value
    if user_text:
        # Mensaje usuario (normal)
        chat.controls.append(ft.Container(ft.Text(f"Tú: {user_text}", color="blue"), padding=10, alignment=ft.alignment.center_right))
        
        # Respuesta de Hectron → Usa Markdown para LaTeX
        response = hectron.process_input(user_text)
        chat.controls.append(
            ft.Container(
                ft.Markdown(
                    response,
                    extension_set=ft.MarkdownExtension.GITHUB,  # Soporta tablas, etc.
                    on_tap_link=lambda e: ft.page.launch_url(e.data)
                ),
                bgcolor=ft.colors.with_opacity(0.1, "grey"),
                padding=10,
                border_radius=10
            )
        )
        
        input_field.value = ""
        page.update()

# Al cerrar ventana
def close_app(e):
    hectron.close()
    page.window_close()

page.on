@@ -1,0 +1,33 @@
+import flet as ft
+
+# ... en tu función de envío de mensaje ...
+def send_message(e):
+    user_text = input_field.value
+    if user_text:
+        # Mensaje usuario (normal)
+        chat.controls.append(ft.Container(ft.Text(f"Tú: {user_text}", color="blue"), padding=10, alignment=ft.alignment.center_right))
+        
+        # Respuesta de Hectron → Usa Markdown para LaTeX
+        response = hectron.process_input(user_text)
+        chat.controls.append(
+            ft.Container(
+                ft.Markdown(
+                    response,
+                    extension_set=ft.MarkdownExtension.GITHUB,  # Soporta tablas, etc.
+                    on_tap_link=lambda e: ft.page.launch_url(e.data)
+                ),
+                bgcolor=ft.colors.with_opacity(0.1, "grey"),
+                padding=10,
+                border_radius=10
+            )
+        )
+        
+        input_field.value = ""
+        page.update()
+
+# Al cerrar ventana
+def close_app(e):
+    hectron.close()
+    page.window_close()
+
+page.on_close = close_app
