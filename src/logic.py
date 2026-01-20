@@ -2,17 +2,19 @@ from agents.lyrics_agent import LyricsAgent
 from agents.crypto_agent import CryptoAgent
 from agents.geo_agent import GeoAgent
 from agents.general_agent import GeneralAgent
+from agents.math_agent import MathAgent  # NUEVO
 
 class HectronBrain:
     def __init__(self):
-        self.memory = []  # Conversaciones temporales
-        self.version = "Hectron-01 (Multi-Agent Codex Build)"
+        self.memory = []
+        self.version = "Hectron-01 (Multi-Agent Codex Build + Math)"
         
-        # Instanciar agentes especializados
+        # Instanciar agentes
         self.lyrics = LyricsAgent()
         self.crypto = CryptoAgent()
         self.geo = GeoAgent()
         self.general = GeneralAgent()
+        self.math = MathAgent()  # NUEVO
 
     def process_input(self, text):
         text_lower = text.lower()
@@ -24,23 +26,26 @@ class HectronBrain:
             if len(parts) == 2:
                 mineral = parts[0].strip()
                 desc = parts[1].strip()
-                response = self.geo.add_knowledge(mineral, desc)
-                response = f"🪨 {response}"
+                self.geo.add_knowledge(mineral, desc)
+                response = f"🪨 Conocimiento permanente agregado: {mineral.capitalize()}"
             else:
                 response = "Formato: 'aprende sobre [mineral]: [descripción]'"
-        # Routing
+
+        # Routing de agentes
         elif any(w in text_lower for w in ["rap", "letra", "rima", "cancion", "lirica", "lírika"]):
             response = self.lyrics.process(text)
         elif any(w in text_lower for w in ["roca", "mineral", "piedra", "geologia", "geo"]):
             response = self.geo.process(text)
         elif any(w in text_lower for w in ["hex", "bitcoin", "hash", "codigo", "cripto"]):
             response = self.crypto.process(text)
+        elif any(w in text_lower for w in ["mate", "matematica", "matemáticas", "calcular", "resolver", "ecuacion", "derivar", "derivada", "integrar", "integral"]):  # NUEVO
+            response = self.math.process(text)
         elif "hora" in text_lower:
             response = self.general.get_time()
         elif "status" in text_lower:
-            response = f"{self.version}: Operativo.\nAgentes cargados: 4\nBase geo: {len(self.geo.geo_db)} entradas\nMemoria temporal: {len(self.memory)}"
+            response = f"{self.version}: Operativo.\nAgentes cargados: 5\nBase geo: {len(self.geo.geo_db)} entradas\nMemoria temporal: {len(self.memory)}"
         elif "memoria" in text_lower:
-            recent = self.memory[-10:]  # Últimas 10 para más contexto
+            recent = self.memory[-10:]
             response = "Memoria reciente:\n" + "\n".join(recent) if recent else "Vacía."
         else:
             response = self.general.philosophical()
