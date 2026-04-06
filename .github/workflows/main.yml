@@ -1,0 +1,47 @@
+name: Forja de HECTRON APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Compilando en la Nube
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargando ADN del Repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalando Python (El Cerebro)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalando Java (Requisito de Android)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Instalando Flutter SDK (La Maquinaria Pesada)
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Instalando Flet
+        run: pip install -r requirements.txt
+
+      - name: 🛠️ BYPASS TÁCTICO: Extrayendo el núcleo a la raíz
+        run: cp src/main.py ./main.py
+
+      - name: ⚙️ COMPILANDO APK ⚙️
+        run: flet build apk
+
+      - name: Entregando el Artefacto (Tu App)
+        uses: actions/upload-artifact@v4
+        with:
+          name: HECTRON-V6-APK
+          path: build/apk/**/*.apk
+          
